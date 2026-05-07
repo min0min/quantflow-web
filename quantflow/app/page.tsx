@@ -653,7 +653,7 @@ useEffect(() => {
   }
 if (!user) {
   return (
-    <main className="min-h-screen bg-[#050505] text-white flex items-center justify-center relative overflow-hidden">
+   <main className="min-h-screen bg-[#050505] text-white flex items-start md:items-center justify-center relative overflow-hidden px-4 py-8 md:p-0">
       {/* premium background */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_20%,rgba(255,255,255,0.08),transparent_28%),linear-gradient(135deg,rgba(255,122,24,0.12),transparent_32%,rgba(59,130,246,0.10))]" />
       <div className="absolute inset-0 bg-[radial-gradient(circle,rgba(255,255,255,0.12)_1px,transparent_1px)] [background-size:34px_34px] opacity-[0.18]" />
@@ -699,7 +699,7 @@ if (!user) {
             </span>
           </div>
 
-          <h1 className="text-5xl font-black leading-[0.9] tracking-tight">
+          <h1 className="text-4xl md:text-5xl font-black leading-[0.95] md:leading-[0.9] tracking-tight">
             QuantFlow
             <br />
             <span className="text-2xl font-semibold text-zinc-400 tracking-normal">
@@ -753,7 +753,7 @@ if (!user) {
 </button>
           </div>
 
-          <div className="mt-8 grid grid-cols-3 gap-3 text-center">
+         <div className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-3 text-center">
             <div className="rounded-2xl bg-white/[0.04] border border-white/10 p-3">
               <p className="text-[10px] text-zinc-500">MODE</p>
               <p className="text-xs font-bold mt-1">PRIVATE</p>
@@ -779,9 +779,9 @@ if (!user) {
   return (
     <main className="min-h-screen bg-black text-white p-8">
       <section className="max-w-7xl mx-auto">
-        <div className="flex justify-between gap-4 items-start">
+        <div className="flex flex-col md:flex-row md:justify-between gap-4 md:items-start">
           <div>
-            <h1 className="text-4xl font-bold">QuantFlow</h1>
+            <h1 className="text-3xl md:text-4xl font-bold">QuantFlow</h1>
             <p className="text-zinc-400 mt-2">
               달력 기반 오토로직 매매 기록 · 자산/입출금/손익률 관리(유민/동혁)
             </p>
@@ -810,7 +810,7 @@ if (!user) {
 </button>
 
   {role === "admin" && (
-  <div className="mt-4 flex gap-2">
+ <div className="mt-4 flex flex-col sm:flex-row gap-2">
     <input
       type="email"
       placeholder="친구 이메일 입력"
@@ -832,7 +832,7 @@ if (!user) {
 
           <div className="bg-zinc-900 rounded-2xl p-4 border border-zinc-800">
             <p className="text-sm text-zinc-400 mb-2">날짜 선택</p>
-            <div className="flex gap-2">
+            <div className="flex flex-col sm:flex-row gap-2">
               <input
                 type="date"
                 value={selectedDate}
@@ -852,7 +852,7 @@ if (!user) {
           </div>
         </div>
 
-        <div className="grid grid-cols-5 gap-4 mt-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mt-8">
           <Card title="시작 총자산" value={`$${capitalStats.startCapital}`} />
           <Card title="순입출금" value={`$${capitalStats.netCashFlow}`} color={pnlColor(capitalStats.netCashFlow)} />
           <Card title="매매 손익" value={`$${stats.totalPnl}`} color={pnlColor(stats.totalPnl)} />
@@ -860,14 +860,14 @@ if (!user) {
           <Card title="자산 대비 수익률" value={`${capitalStats.roi.toFixed(2)}%`} color={pnlColor(capitalStats.roi)} />
         </div>
 
-        <div className="grid grid-cols-4 gap-4 mt-4">
+       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-4">
           <Card title="금일 손익" value={`$${stats.dayPnl}`} color={pnlColor(stats.dayPnl)} />
           <Card title="월별 손익" value={`$${stats.monthPnl}`} color={pnlColor(stats.monthPnl)} />
           <Card title="연별 손익" value={`$${stats.yearPnl}`} color={pnlColor(stats.yearPnl)} />
           <Card title="전체 손익" value={`$${stats.totalPnl}`} color={pnlColor(stats.totalPnl)} />
         </div>
 
-        <div className="grid grid-cols-5 gap-5 mt-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 sm:gap-5 mt-5">
           <Card title="현재 총 자산" value={`$${Number(totalAsset || 0).toLocaleString('en-US', { minimumFractionDigits: 2 
             })}`} 
           color={pnlColor(totalAsset - Number(initialCapital || 0))}
@@ -878,7 +878,7 @@ if (!user) {
           <Card title="선택 날짜" value={selectedDate} />
         </div>
 
-        <div className="grid grid-cols-3 gap-4 mt-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mt-8">
           <div className="bg-zinc-900 rounded-2xl p-5 border border-zinc-800">
             <h2 className="text-xl font-bold mb-4">자산 설정</h2>
 
@@ -947,7 +947,7 @@ if (!user) {
                 {cashFlows.map((cash) => (
                   <div
                     key={cash.id}
-                    className="grid grid-cols-[1.4fr_0.8fr_1fr_1.5fr_30px] gap-2 text-sm border-b border-zinc-800 pb-2 items-center"
+                   className="grid grid-cols-1 sm:grid-cols-[1.4fr_0.8fr_1fr_1.5fr_30px] gap-2 text-sm border-b border-zinc-800 pb-2 sm:items-center"
                   >
                     <span className="text-zinc-400">
                       {cash.date} {cash.time}
@@ -1003,7 +1003,7 @@ if (!user) {
 
         <h2 className="text-2xl font-bold mt-10 mb-4">자산 선택</h2>
 
-        <div className="grid grid-cols-3 gap-4">
+<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {assets.map((asset) => {
             const assetPnl = getAssetPnl(asset.symbol);
             const selected = selectedAsset === asset.symbol;
@@ -1012,7 +1012,7 @@ if (!user) {
               <button
                 key={asset.symbol}
                 onClick={() => setSelectedAsset(asset.symbol)}
-                className={`relative overflow-hidden text-left min-h-[210px] rounded-2xl p-6 border transition ${
+                className={`relative overflow-hidden text-left min-h-[150px] md:min-h-[210px] rounded-2xl p-4 md:p-6 border transition ${
                   selected
                     ? `bg-zinc-950 ${asset.accent}`
                     : "bg-zinc-900 border-zinc-800 hover:border-zinc-500"
@@ -1021,7 +1021,7 @@ if (!user) {
                 <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_top_right,_#ffffff33,_transparent_35%)]" />
                 <div className="relative z-10">
                   <p className="text-xs tracking-[0.35em] text-zinc-500">{asset.category}</p>
-                  <h3 className={`text-5xl font-black mt-8 tracking-tight ${selected ? asset.accent.split(" ")[1] : "text-white"}`}>
+                 <h3 className={`text-3xl md:text-5xl font-black mt-6 md:mt-8 tracking-tight ${selected ? asset.accent.split(" ")[1] : "text-white"}`}>
                     {asset.name}
                   </h3>
                   <p className="text-zinc-400 mt-2 tracking-widest">{asset.label}</p>
@@ -1034,7 +1034,7 @@ if (!user) {
           })}
         </div>
 
-        <div className="grid grid-cols-3 gap-4 mt-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mt-8">
           <div className="bg-zinc-900 rounded-2xl p-5 border border-zinc-800">
             <h2 className="text-xl font-bold mb-4">
               {selectedDate} · {selectedAsset} 매매 추가
@@ -1084,7 +1084,7 @@ if (!user) {
         </div>
 
         <div className="mt-8 bg-zinc-900 rounded-2xl p-5 border border-zinc-800">
-          <div className="flex justify-between gap-4 items-start mb-5">
+         <div className="flex flex-col md:flex-row md:justify-between gap-4 md:items-start mb-5">
             <div>
               <h2 className="text-xl font-bold">전체 매매 검색</h2>
               <p className="text-sm text-zinc-400 mt-1">
@@ -1092,7 +1092,7 @@ if (!user) {
               </p>
             </div>
 
-            <div className="grid grid-cols-3 gap-3">
+           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
               <select
                 value={filterMode}
                 onChange={(e) => setFilterMode(e.target.value as FilterMode)}
@@ -1124,7 +1124,7 @@ if (!user) {
             </div>
           </div>
 
-          <div className="grid grid-cols-3 gap-4 mb-5">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-5">
             <Card title="검색된 거래 수" value={`${searchStats.count}회`} />
             <Card title="검색 결과 총합" value={`$${searchStats.total}`} color={pnlColor(searchStats.total)} />
             <Card title="손실 평균" value={`$${searchStats.avgLoss}`} color={pnlColor(searchStats.avgLoss)} />
@@ -1139,7 +1139,7 @@ if (!user) {
               {searchTrades.map((trade) => (
                 <div
                   key={trade.id}
-                  className="grid grid-cols-[1.2fr_0.8fr_0.8fr_0.8fr_0.8fr_1.5fr_40px] gap-3 border-b border-zinc-800 pb-3 text-sm items-center"
+                 className="grid grid-cols-1 sm:grid-cols-[1.2fr_0.8fr_0.8fr_0.8fr_0.8fr_1.5fr_40px] gap-3 border-b border-zinc-800 pb-3 text-sm sm:items-center"
                 >
                   <span className="text-zinc-400">
                     {trade.date} {trade.time}
@@ -1174,7 +1174,7 @@ function TradeRow({
   onDelete: (id: string) => void;
 }) {
   return (
-    <div className="grid grid-cols-[1fr_1fr_1fr_1fr_1fr_2fr_40px] gap-3 border-b border-zinc-800 pb-3 text-sm items-center">
+    <div className="grid grid-cols-1 sm:grid-cols-[1fr_1fr_1fr_1fr_1fr_2fr_40px] gap-3 border-b border-zinc-800 pb-3 text-sm sm:items-center">
       <span className="text-zinc-400">{trade.time}</span>
       <span>{trade.asset}</span>
       <span>{trade.side}</span>
