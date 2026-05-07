@@ -259,32 +259,32 @@ if (settingError) {
     setUser(data.session?.user ?? null);
 
     if (data.session?.user) {
-      await supabase.from("profiles").upsert(
-  {
-    user_id: data.session.user.id,
-  email: data.session.user.email,
-  },
-  {
-    onConflict: "user_id",
+  const { data: existingProfile } = await supabase
+    .from("profiles")
+    .select("role")
+    .eq("user_id", data.session.user.id)
+    .maybeSingle();
+
+  if (!existingProfile) {
+    await supabase.from("profiles").insert({
+      user_id: data.session.user.id,
+      email: data.session.user.email,
+      role: "viewer",
+    });
   }
-);
-const { data: profileData} = await supabase
-  .from("profiles")
-  .select("role")
-  .eq("user_id", data.session.user.id)
-  .single();
 
-  alert(
-  "로그인 이메일: " + data.session.user.email +
-  "\nrole: " + profileData?.role
-);
+  const { data: profileData } = await supabase
+    .from("profiles")
+    .select("role")
+    .eq("user_id", data.session.user.id)
+    .maybeSingle();
 
-if (profileData) {
-  setRole(profileData.role);
+  if (profileData) {
+    setRole(profileData.role);
+  }
+
+ await fetchTrades(data.session.user);
 }
-
-    await fetchTrades(data.session.user);
-    }
 
     setIsLoaded(true);
   }
