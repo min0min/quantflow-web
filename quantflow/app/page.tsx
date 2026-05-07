@@ -262,8 +262,7 @@ if (settingError) {
       await supabase.from("profiles").upsert(
   {
     user_id: data.session.user.id,
-    email: data.session.user.email,
-    role: data.session.user.email === "youmin082987@gmail.com" ? "admin" : "viewer",
+  email: data.session.user.email,
   },
   {
     onConflict: "user_id",
