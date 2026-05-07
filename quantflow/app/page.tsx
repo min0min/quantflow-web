@@ -275,6 +275,11 @@ const { data: profileData} = await supabase
   .eq("user_id", data.session.user.id)
   .single();
 
+  alert(
+  "로그인 이메일: " + data.session.user.email +
+  "\nrole: " + profileData?.role
+);
+
 if (profileData) {
   setRole(profileData.role);
 }
