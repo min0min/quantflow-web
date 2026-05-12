@@ -1192,6 +1192,20 @@ function TradeRow({
   );
 }
 
+function formatMoney(value: string | number) {
+  const text = String(value);
+
+  if (!text.startsWith("$")) return text;
+
+  const num = Number(text.replace("$", ""));
+
+  if (Number.isNaN(num)) return text;
+
+  return `$${num.toFixed(2)}`;
+}
+
+
+
 function Card({
   title,
   value,
@@ -1204,7 +1218,7 @@ function Card({
   return (
     <div className="bg-zinc-900 rounded-2xl p-5 border border-zinc-800">
       <p className="text-zinc-400">{title}</p>
-      <h2 className={`text-3xl font-bold mt-2 ${color}`}>{value}</h2>
+      <h2 className={`text-3xl font-bold mt-2 ${color}`}>{formatMoney(value)}</h2>
     </div>
   );
 }
