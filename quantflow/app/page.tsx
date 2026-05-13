@@ -980,9 +980,17 @@ if (!user) {
                       {cash.date} {cash.time}
                     </span>
                     <span>{cash.type}</span>
-                    <span className={cash.type === "입금" ? "text-green-400" : "text-red-400"}>
-                      ${cash.amount}
-                    </span>
+                  <span>
+  <span className={cash.type === "입금" ? "text-green-400" : "text-red-400"}>
+    {formatMoney(`$${cash.amount}`)}
+      </span>
+
+  {exchangeRate !== null && (
+    <p className="text-[11px] text-white/40 mt-0.5">
+      약 ₩{Math.round(Number(cash.amount) * exchangeRate).toLocaleString("ko-KR")}
+    </p>
+  )}
+</span>
                     <span className="text-zinc-400">{cash.note || "-"}</span>
                     <button
                       onClick={() => deleteCashFlow(cash.id)}
@@ -1013,14 +1021,24 @@ if (!user) {
                 <CartesianGrid stroke="#333" />
                 <XAxis dataKey="date" stroke="#aaa" />
                 <YAxis stroke="#aaa" />
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: "#18181b",
-                    border: "1px solid #3f3f46",
-                    borderRadius: "12px",
-                    color: "white",
-                  }}
-                />
+            <Tooltip
+  contentStyle={{
+    backgroundColor: "#18181b",
+    border: "1px solid #3f3f46",
+    borderRadius: "12px",
+    color: "white",
+  }}
+ formatter={(value, name) => {
+    const dollar = `$${Number(value).toFixed(2)}`;
+    const krw =
+      exchangeRate !== null
+        ? `약 ₩${Math.round(Number(value) * exchangeRate).toLocaleString("ko-KR")}`
+        : "";
+
+    return [`${dollar}${krw ? ` / ${krw}` : ""}`, name];
+  }}
+/>
+                
                 <Line type="monotone" dataKey="daily" stroke="#22c55e" strokeWidth={3} name="일별 손익" />
                 <Line type="monotone" dataKey="cumulative" stroke="#3b82f6" strokeWidth={3} name="누적 손익" />
               </LineChart>
@@ -1103,7 +1121,12 @@ if (!user) {
             ) : (
               <div className="space-y-3">
                 {filteredTrades.map((trade) => (
-                  <TradeRow key={trade.id} trade={trade} onDelete={deleteTrade} />
+                  <TradeRow
+  key={trade.id}
+  trade={trade}
+  onDelete={deleteTrade}
+  exchangeRate={exchangeRate}
+/>
                 ))}
               </div>
             )}
@@ -1196,16 +1219,26 @@ if (!user) {
 function TradeRow({
   trade,
   onDelete,
+  exchangeRate,
 }: {
   trade: Trade;
   onDelete: (id: string) => void;
+  exchangeRate?: number | null;
 }) {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-[1fr_1fr_1fr_1fr_1fr_2fr_40px] gap-3 border-b border-zinc-800 pb-3 text-sm sm:items-center">
       <span className="text-zinc-400">{trade.time}</span>
       <span>{trade.asset}</span>
       <span>{trade.side}</span>
-      <span className={pnlColor(trade.pnl)}>${trade.pnl}</span>
+      <span>
+  <span className={pnlColor(trade.pnl)}>{formatMoney(`$${trade.pnl}`)}</span>
+
+  {exchangeRate !== null && exchangeRate !== undefined && (
+    <p className="text-[11px] text-white/40 mt-0.5">
+      약 ₩{Math.round(Number(trade.pnl) * exchangeRate).toLocaleString("ko-KR")}
+    </p>
+  )}
+</span>
       <span>{trade.result}</span>
       <span className="text-zinc-400">{trade.note || "-"}</span>
       <button
