@@ -61,6 +61,13 @@ const assets = [
     label: "XAU / SYMBOL",
     accent: "border-yellow-500 text-yellow-400",
   },
+  { symbol: "ALT" as Asset,
+    category: "CRYPTO",
+    name: "Altcoin",
+    label: " AIT/SYMBOL",
+    accent: "border-purple-500 text-purple-400",
+  },
+
 ];
 
 function getKoreaDateTime() {
