@@ -106,6 +106,7 @@ const [role, setRole] = useState<UserRole>("viewer");
   const [cashFlows, setCashFlows] = useState<CashFlow[]>([]);
   const [initialCapital, setInitialCapital] = useState("0");
   const [totalAsset, setTotalAsset] = useState(0);
+  const [exchangeRate, setExchangeRate] = useState<number | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
 
   const [side, setSide] = useState<Side>("Long");
@@ -258,6 +259,25 @@ if (settingError) {
   const [filterMode, setFilterMode] = useState<FilterMode>("전체");
   const [filterAsset, setFilterAsset] = useState<"ALL" | Asset>("ALL");
   const [searchText, setSearchText] = useState("");
+
+
+
+  useEffect(() => {
+  async function fetchExchangeRate() {
+    try {
+      const res = await fetch("https://open.er-api.com/v6/latest/USD");
+      const data = await res.json();
+
+      if (data?.rates?.KRW) {
+        setExchangeRate(data.rates.KRW);
+      }
+    } catch (error) {
+      console.error("환율 불러오기 실패:", error);
+    }
+  }
+
+  fetchExchangeRate();
+}, []);
 
   useEffect(() => {
   async function checkSession() {
@@ -860,25 +880,25 @@ if (!user) {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mt-8">
-          <Card title="시작 총자산" value={`$${capitalStats.startCapital}`} />
-          <Card title="순입출금" value={`$${capitalStats.netCashFlow}`} color={pnlColor(capitalStats.netCashFlow)} />
-          <Card title="매매 손익" value={`$${stats.totalPnl}`} color={pnlColor(stats.totalPnl)} />
-          <Card title="현재 자산" value={`$${capitalStats.currentBalance}`} color={pnlColor(capitalStats.currentBalance - capitalStats.capitalBase)} />
-          <Card title="자산 대비 수익률" value={`${capitalStats.roi.toFixed(2)}%`} color={pnlColor(capitalStats.roi)} />
+          <Card title="시작 총자산" value={`$${capitalStats.startCapital}`} exchangeRate={exchangeRate}/>
+          <Card title="순입출금" value={`$${capitalStats.netCashFlow}`} color={pnlColor(capitalStats.netCashFlow)}exchangeRate={exchangeRate} />
+          <Card title="매매 손익" value={`$${stats.totalPnl}`} color={pnlColor(stats.totalPnl)} exchangeRate={exchangeRate}/>
+          <Card title="현재 자산" value={`$${capitalStats.currentBalance}`} color={pnlColor(capitalStats.currentBalance - capitalStats.capitalBase)} exchangeRate={exchangeRate} />
+          <Card title="자산 대비 수익률" value={`${capitalStats.roi.toFixed(2)}%`} color={pnlColor(capitalStats.roi)}exchangeRate={exchangeRate} />
         </div>
 
        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-4">
-          <Card title="금일 손익" value={`$${stats.dayPnl}`} color={pnlColor(stats.dayPnl)} />
-          <Card title="월별 손익" value={`$${stats.monthPnl}`} color={pnlColor(stats.monthPnl)} />
-          <Card title="연별 손익" value={`$${stats.yearPnl}`} color={pnlColor(stats.yearPnl)} />
-          <Card title="전체 손익" value={`$${stats.totalPnl}`} color={pnlColor(stats.totalPnl)} />
+          <Card title="금일 손익" value={`$${stats.dayPnl}`} color={pnlColor(stats.dayPnl)}exchangeRate={exchangeRate} />
+          <Card title="월별 손익" value={`$${stats.monthPnl}`} color={pnlColor(stats.monthPnl)} exchangeRate={exchangeRate}/>
+          <Card title="연별 손익" value={`$${stats.yearPnl}`} color={pnlColor(stats.yearPnl)} exchangeRate={exchangeRate}/>
+          <Card title="전체 손익" value={`$${stats.totalPnl}`} color={pnlColor(stats.totalPnl)} exchangeRate={exchangeRate}/>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 sm:gap-5 mt-5">
           <Card title="현재 총 자산" value={`$${Number(totalAsset || 0).toLocaleString('en-US', { minimumFractionDigits: 2 
             })}`} 
           color={pnlColor(totalAsset - Number(initialCapital || 0))}
-          />
+          exchangeRate={exchangeRate}/>
           <Card title="총 매매 횟수" value={`${stats.tradeCount}회`} />
           <Card title="승률" value={`${stats.winRate}%`} />
           <Card title="규칙 준수율" value={`${stats.ruleRate}%`} />
@@ -1217,15 +1237,22 @@ function Card({
   title,
   value,
   color = "text-white",
+  exchangeRate,
 }: {
   title: string;
   value: string;
   color?: string;
+  exchangeRate?: number | null;
 }) {
   return (
     <div className="bg-zinc-900 rounded-2xl p-5 border border-zinc-800">
       <p className="text-zinc-400">{title}</p>
       <h2 className={`text-3xl font-bold mt-2 ${color}`}>{formatMoney(value)}</h2>
+      {exchangeRate && value.startsWith("$") && (
+  <p className="text-xs text-white/45 mt-1">
+    약 ₩{Math.round(Number(value.replace("$", "")) * exchangeRate).toLocaleString("ko-KR")}
+  </p>
+)}
     </div>
   );
 }
