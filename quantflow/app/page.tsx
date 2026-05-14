@@ -1283,7 +1283,7 @@ function Card({
       <h2 className={`text-3xl font-bold mt-2 ${color}`}>{formatMoney(value)}</h2>
       {exchangeRate && value.startsWith("$") && (
   <p className="text-xs text-white/45 mt-1">
-    약 ₩{Math.round(Number(value.replace("$", "")) * exchangeRate).toLocaleString("ko-KR")}
+    약 ₩{Math.round(Number(value.replace("$", "").replaceAll(",", "")) * exchangeRate).toLocaleString("ko-KR")}
   </p>
 )}
     </div>
